@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
+import AdDisplay from "@/components/ads/AdDisplay";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -85,6 +86,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </div>
           </div>
         </header>
+        <div className="max-w-7xl mx-auto px-4">
+            {/* Component này sẽ đọc từ Database vị trí HEADER */}
+            <AdDisplay location="HEADER" />
+        </div>
         
         {/* VIEWPORT CONTENT */}
         <div className="min-h-[80vh]">

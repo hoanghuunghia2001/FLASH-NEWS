@@ -8,13 +8,14 @@ export default async function AdDisplay({ location }: { location: 'HEADER' | 'SI
   // Nếu không có ad hoặc ad đang tắt thì không hiện gì cả
   if (!ad || !ad.isActive || !ad.code) return null;
 
-  return (
-    <div className="ad-container my-8 flex justify-center w-full overflow-hidden">
-      {/* Dùng dangerouslySetInnerHTML để render script của Google Adsense hoặc HTML Banner */}
-      <div 
-        className="max-w-full"
-        dangerouslySetInnerHTML={{ __html: ad.code }} 
-      />
-    </div>
-  );
+// components/ads/AdDisplay.tsx
+return (
+  <div className="ad-container my-8 flex justify-center w-full overflow-hidden">
+    <div 
+      className="max-w-full"
+      dangerouslySetInnerHTML={{ __html: ad.code }} 
+      suppressHydrationWarning={true} // Thêm dòng này vào đây
+    />
+  </div>
+);
 }
