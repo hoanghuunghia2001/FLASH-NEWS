@@ -1,0 +1,60 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 1. Quản trị viên
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+}
+
+// 2. Bài viết (Hỗ trợ cả viết tay và tự động)
+model Post {
+  id              String   @id @default(cuid())
+  title           String
+  slug            String   @unique
+  content         String   @db.Text
+  excerpt         String?  @db.Text // Tóm tắt ngắn cho SEO
+  coverImage      String?           // Link ảnh đại diện
+  published       Boolean  @default(false)
+  
+  // Phân biệt bài crawl và bài viết tay
+  isAuto          Boolean  @default(false)
+  sourceUrl       String?           // Link gốc bài crawl
+  
+  // SEO nâng cao
+  metaTitle       String?
+  metaDescription String?
+  
+  viewCount       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  categoryId      String?
+  category        Category? @relation(fields: [categoryId], references: [id])
+}
+
+// 3. Danh mục
+model Category {
+  id    String @id @default(cuid())
+  name  String @unique
+  slug  String @unique
+  posts Post[]
+}
+
+// 4. Quản lý quảng cáo (Tiền nằm ở đây)
+model Ad {
+  id        String   @id @default(cuid())
+  location  String   @unique // 'HEADER', 'SIDEBAR', 'CONTENT_MIDDLE'
+  code      String   @db.Text // Script Adsense hoặc HTML Banner
+  isActive  Boolean  @default(true)
+  updatedAt DateTime @updatedAt
+}
