@@ -17,7 +17,7 @@ export default async function Home() {
       <section className="relative py-20 px-4 bg-gradient-to-b from-blue-50 to-white dark:from-zinc-900 dark:to-zinc-950">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
-            Khám phá thế giới <br /> 
+            Khám phá thế giới <br />
             <span className="text-blue-600">Lập trình & Công nghệ</span>
           </h1>
           <p className="text-lg text-zinc-600 dark:text-zinc-400 mb-10 max-w-2xl mx-auto">
@@ -64,31 +64,32 @@ export default async function Home() {
 
 // Component thẻ bài viết
 function PostCard({ post }: { post: any }) {
-  console.log(post);
-  
+
   return (
-    <article className="group cursor-pointer">
-      <div className="relative aspect-video overflow-hidden rounded-2xl mb-4 bg-zinc-100 dark:bg-zinc-900">
-        <Image
-          src={post.coverImage || "https://images.unsplash.com/photo-1498050108023-c5249f4df085"}
-          alt={post.title}
-          fill
-          className="object-cover transition duration-500 group-hover:scale-105"
-        />
-      </div>
-      <div className="space-y-2">
-        <div className="flex items-center gap-3 text-xs font-medium text-blue-600 uppercase tracking-widest">
-          <span>{new Date(post.createdAt).toLocaleDateString('vi-VN')}</span>
-          <span className="w-1 h-1 bg-zinc-300 rounded-full"></span>
-          <span>5 min read</span>
+    <Link href={`/posts/${post.slug}`}>
+      <article className="group cursor-pointer">
+        <div className="relative aspect-video overflow-hidden rounded-2xl mb-4 bg-zinc-100 dark:bg-zinc-900">
+          <Image
+            src={post.coverImage || "https://images.unsplash.com/photo-1498050108023-c5249f4df085"}
+            alt={post.title}
+            fill
+            className="object-cover transition duration-500 group-hover:scale-105"
+          />
         </div>
-        <h3 className="text-xl font-bold leading-snug group-hover:text-blue-600 transition">
-          <Link href={`/posts/${post.slug}`}>{post.title}</Link>
-        </h3>
-        <p className="text-zinc-600 dark:text-zinc-400 line-clamp-2 text-sm leading-relaxed">
-          {post.description || "Khám phá chi tiết nội dung bài viết thú vị này tại My Pro Blog..."}
-        </p>
-      </div>
-    </article>
+        <div className="space-y-2">
+          <div className="flex items-center gap-3 text-xs font-medium text-blue-600 uppercase tracking-widest">
+            <span>{new Date(post.createdAt).toLocaleDateString('vi-VN')}</span>
+            <span className="w-1 h-1 bg-zinc-300 rounded-full"></span>
+            <span>5 min read</span>
+          </div>
+          <h3 className="text-xl font-bold leading-snug group-hover:text-blue-600 transition">
+            {post.title}
+          </h3>
+          <p className="text-zinc-600 dark:text-zinc-400 line-clamp-2 text-sm leading-relaxed">
+            {post.description || "Khám phá chi tiết nội dung bài viết thú vị này tại My Pro Blog..."}
+          </p>
+        </div>
+      </article>
+    </Link>
   );
 }

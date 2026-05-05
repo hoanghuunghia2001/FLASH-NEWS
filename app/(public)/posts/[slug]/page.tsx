@@ -27,6 +27,9 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
     orderBy: { createdAt: 'desc' }
   });
 
+
+  console.log(post);
+  
   return (
     <main className="bg-[#fcfaf6] dark:bg-zinc-950 min-h-screen pb-20">
       {/* Breadcrumb - Cố định độ cao để không đè nội dung */}
@@ -50,12 +53,24 @@ export default async function PostDetailPage({ params }: { params: Promise<{ slu
                 {post.title}
               </h1>
               
-              <div className="flex justify-between items-center py-4 border-t border-zinc-100 dark:border-zinc-800 mb-8 text-sm text-zinc-500">
+              <div className="flex justify-between items-center py-4 border-t border-zinc-100 dark:border-zinc-800 mb-4 text-sm text-zinc-500">
                 <div className="flex items-center gap-2">
-                   <span className="font-bold text-zinc-700 dark:text-zinc-300">VnExpress Clone</span>
+                   <span className="font-bold text-zinc-700 dark:text-zinc-300">FLASH NEW</span>
                    <span>•</span>
                    <span>{new Date(post.createdAt).toLocaleDateString('vi-VN')}</span>
                 </div>
+              </div>
+              <div>
+                {post.coverImage && (
+                  <div className="relative w-full h-64 md:h-96 mb-8 rounded-xl overflow-hidden">
+                    <Image
+                      src={post.coverImage}
+                      alt={post.title}
+                      fill
+                      className="object-cover w-full h-full rounded-xl shadow-sm"
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Nội dung bài viết - Thêm padding để tránh sát lề mobile */}

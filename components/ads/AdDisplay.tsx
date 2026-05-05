@@ -10,7 +10,7 @@ export default async function AdDisplay({ location }: { location: 'HEADER' | 'SI
 
 // components/ads/AdDisplay.tsx
 return (
-  <div className="ad-container my-8 flex justify-center w-full overflow-hidden">
+  <div className="ad-container  flex justify-center w-full overflow-hidden m-0">
     <div 
       className="max-w-full"
       dangerouslySetInnerHTML={{ __html: ad.code }} 

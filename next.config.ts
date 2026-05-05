@@ -23,6 +23,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: '**.vnecdn.net', // Cho ảnh từ VnExpress
       },
+       {
+        protocol: 'https',
+        hostname: '**.vnncdn.net', // Cho ảnh từ VnExpress
+      },
     ],
   },
 };

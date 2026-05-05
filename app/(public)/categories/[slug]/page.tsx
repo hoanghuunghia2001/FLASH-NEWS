@@ -86,7 +86,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                   {featuredPost.excerpt}
                 </p>
                 <div className="mt-6 flex items-center gap-3 text-xs text-zinc-400">
-                  <span className="font-bold text-zinc-900 dark:text-zinc-100 italic">VnExpress Clone</span>
+                  <span className="font-bold text-zinc-900 dark:text-zinc-100 italic">FLASH NEWS</span>
                   <span>•</span>
                   <span>{new Date(featuredPost.createdAt).toLocaleDateString('vi-VN')}</span>
                 </div>
