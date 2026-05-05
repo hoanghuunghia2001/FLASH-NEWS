@@ -71,7 +71,7 @@ export async function GET(request: Request) {
   }
 
   // Lọc nguồn tin: Nếu có topic thì chỉ cào topic đó, không thì cào tất cả
-  const selectedSources = topic 
+  const selectedSources = topic
     ? SOURCES_CONFIG.filter(s => s.slug === topic)
     : SOURCES_CONFIG;
 
@@ -101,7 +101,7 @@ export async function GET(request: Request) {
       const items = feed.items.filter(item => {
         const pubDate = new Date(item.pubDate || "");
         return pubDate >= startOfToday;
-      }).slice(0, 3);
+      }).slice(0, 5);
 
       for (const item of items) {
         const sourceUrl = item.link || "";
@@ -125,15 +125,36 @@ export async function GET(request: Request) {
 
           const html = await res.text();
           const $ = cheerio.load(html);
-          
+
           // Lấy ảnh cover từ OpenGraph
           coverImage = $('meta[property="og:image"]').attr('content') || "";
-          
-          const selector = getSelector(sourceUrl);
-          const detail = $(selector);
-          
-          // Dọn dẹp HTML rác
-          detail.find('script, style, iframe, .sidebar-item, .table_relate, .ads').remove();
+
+          const detail = $(getSelector(sourceUrl));
+
+          // BƯỚC MỚI: Chuyển đổi các thẻ meta chứa ảnh của VnExpress sang img thực tế
+          detail.find('meta[itemprop="url"], meta[property="og:image"]').each((_, el) => {
+            const $el = $(el);
+            const url = $el.attr('content');
+
+            // Kiểm tra nếu content chứa link ảnh
+            if (url && url.startsWith('http')) {
+              // Chèn một thẻ img vào ngay trước hoặc thay thế thẻ meta đó
+              $el.replaceWith(`<img src="${url}" class="w-full rounded-2xl my-4 shadow-md" />`);
+            }
+          });
+
+          // Sau đó mới thực hiện quét toàn bộ danh sách img để lấy ảnh (bao gồm cả ảnh vừa convert)
+          const images: { src: string; alt: string }[] = [];
+          detail.find('img').each((_, el) => {
+            const $img = $(el);
+            const src = $img.attr('src') || $img.attr('data-src');
+            if (src && src.startsWith('http')) {
+              images.push({ src, alt: $img.attr('alt') || "Hình ảnh minh họa" });
+            }
+          });
+
+          // Tiếp tục các bước dọn dẹp rác khác...
+          detail.find('script, style, iframe, .ads').remove();
           rawHTML = detail.html() || "";
         } catch (err) {
           console.error(`Fetch Content Error: ${sourceUrl}`, err);
@@ -164,15 +185,15 @@ export async function GET(request: Request) {
       }
     }
 
-    return NextResponse.json({ 
-      status: "Success", 
-      message: `Đã xử lý ${totalProcessed} bài mới thuộc mục: ${topic || 'Tất cả'}.` 
+    return NextResponse.json({
+      status: "Success",
+      message: `Đã xử lý ${totalProcessed} bài mới thuộc mục: ${topic || 'Tất cả'}.`
     });
 
   } catch (error: any) {
-    return NextResponse.json({ 
-      status: "Error", 
-      message: error.message 
+    return NextResponse.json({
+      status: "Error",
+      message: error.message
     }, { status: 500 });
   }
 }
